@@ -1,3 +1,5 @@
+require('./keep_alive')
+
 const Discord = require("discord.js");
 
 const client = new Discord.Client({
@@ -34,10 +36,9 @@ const { DiscordUNO } = require(`discord-uno`);
 client.discordUNO = new DiscordUNO("BLURPLE");
 client.queue = new Map();
 const { DiscordTogether } = require("discord-together");
-
 client.discordTogether = new DiscordTogether(client);
 Nuggies = require("nuggies");
-Nuggies.connect(process.env.MONGODB_srv);
+Nuggies.connect((process.env.MONGODB_srv));
 Nuggies.giveaways.startAgain(client);
 Nuggies.handleInteractions(client);
 
@@ -71,7 +72,7 @@ Nuggies.Messages(client, {
   },
 });
 mongoose
-  .connect(process.env.MONGODB_srv, {
+  .connect((process.env.MONGODB_srv), {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
