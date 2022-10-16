@@ -22,8 +22,8 @@ const { Collection } = require("discord.js");
 const Errorhandler = require("discord-error-handler");
 client.handle = new Errorhandler(client, {
   webhook: {
-    id: `907607307603554354`,
-    token: `NOof8jHDZQkAnefnY1MAKp7nMdTnma41iT0p0ePYLWNph0-y5PYMKn1hdkMGTf-i0LP9`,
+    id: process.env.error_webhook_id,
+    token: process.env.error_webhook_token,
   },
 });
 process.on("unhandledRejection", (error) => {
