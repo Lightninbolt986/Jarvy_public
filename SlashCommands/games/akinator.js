@@ -159,7 +159,7 @@ module.exports = {
               notFinished = false;
               isPlaying.delete(interaction.user.id);
               return;
-            } else if (guessAnswer == "n") {
+            } else if (answer == "n") {
               if (aki.currentStep >= 78) {
                 let finishedGameDefeated = new MessageEmbed()
                   .setAuthor({ name: usertag, iconURL: avatar })
