@@ -279,7 +279,7 @@ module.exports = {
                             iconURL:
                               "https://cdn.discordapp.com/attachments/726083288170627125/849910787719168000/download__1_-removebg-preview.png",
                           })
-                          .setDescription(`Requested by ${message.author}`)
+                          .setDescription(`Requested by ${interaction.user.username}`)
                           .setTimestamp()
                           .setColor("BLUE")
                           .setFooter({
@@ -354,7 +354,7 @@ module.exports = {
                       iconURL:
                         "https://cdn.discordapp.com/attachments/726083288170627125/849910787719168000/download__1_-removebg-preview.png",
                     })
-                    .setDescription(`Requested by ${message.author}`)
+                    .setDescription(`Requested by ${interaction.user.username}`)
                     .setImage(data2.url)
                     .setTimestamp()
                     .setFooter({
