@@ -484,7 +484,7 @@ module.exports = {
         interaction.editReply("error");
       }
     } else if (type == "fiveguyonegirl") {
-      const user = interaction.options.getUser("man") || interaction.user;
+      const user = interaction.options.getUser("men") || interaction.user;
       const user2 = interaction.options.getUser("girl");
       await interaction.deferReply();
       try {

@@ -170,30 +170,30 @@ module.exports = {
 
       interaction.reply(randomizeNumber(num1, num2));
     } else if (interaction.options.getSubcommand() === "sudo") {
+      await interaction.deferReply({ ephemeral: true });
       if (
         !interaction.member.permissions.has("MANAGE_MESSAGES") &&
-        !interaction.author.id == "543031298130837510"
+        interaction.user.id !== "543031298130837510"
       )
-        return interaction.reply({
+        return interaction.editReply({
           content: "You need manage messages permission.",
           ephemeral: true,
         });
+
       const user = interaction.options.getMember("user");
       const content = interaction.options.getString("text");
       if (content.length > 2000)
-        return interaction.reply({
+        return interaction.editReply({
           content: "The content can not be above 2000 characters!!",
           ephemeral: true,
         });
-
       await interaction.channel.createWebhook(interaction.user.username, {
         avatar: user.user.displayAvatarURL({ dynamic: true }),
         reason: `${interaction.user.username} used the sudo command!`,
       });
-
       let webhooks = await interaction.channel.fetchWebhooks();
       let webhook = webhooks.last();
-      interaction.reply({ content: "done!", ephemeral: true });
+      interaction.editReply({ content: "done!", ephemeral: true });
       await webhook.send({
         content: content,
         username: user.user.username,
