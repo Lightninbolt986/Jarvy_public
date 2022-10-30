@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 module.exports = {
   name: "chatchart",
   description:
@@ -16,7 +17,7 @@ module.exports = {
     });
     try {
       let authors = [];
-      const list = await fetchMore(message.channel, 5000);
+      const list = await fetchMore(interaction.channel, 5000);
       const arraylist = Array.from(list);
 
       arraylist.forEach((array) => {
@@ -53,7 +54,7 @@ module.exports = {
         });
       }
       if (Object.keys(finalthingyig).length < 3)
-        return message.channel.messages.edit(msg.id, {
+        return interaction.channel.messages.edit(msg.id, {
           content: `Just 2 people lol`,
           embeds: [],
         });
