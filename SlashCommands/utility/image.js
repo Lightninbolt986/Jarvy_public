@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
-const api = require("imageapi.js");
 const { MessageEmbed } = require("discord.js");
+const fetch = require("node-fetch");
 module.exports = {
   name: "image",
   description: "Get a variety of different images",
@@ -33,10 +33,22 @@ module.exports = {
   ],
   async execute(interaction) {
     if (interaction.options.getSubcommand() === "meme") {
-      const fetch = require("node-fetch");
-      async function embed() {
+      const row = new Discord.MessageActionRow().addComponents(
+        new Discord.MessageButton()
+          .setCustomId("reload")
+          .setLabel("Reload Meme")
+          .setStyle("SECONDARY")
+      );
+      const disabled = new Discord.MessageActionRow().addComponents(
+        new Discord.MessageButton()
+          .setCustomId("reload")
+          .setLabel("Reload Meme")
+          .setStyle("SECONDARY")
+          .setDisabled(true)
+      );
+      const embed = async function () {
         let embed1 = null;
-        await fetch(`https://meme-api.herokuapp.com/gimme`).then((res) =>
+        await fetch("https://meme-api.herokuapp.com/gimme").then((res) =>
           res.json().then((url) => {
             embed1 = new Discord.MessageEmbed()
               .setTitle(url.title)
@@ -47,22 +59,37 @@ module.exports = {
           })
         );
         return embed1;
-      }
-      const row = new Discord.MessageActionRow().addComponents(
-        new Discord.MessageButton()
-          .setCustomId("reload")
-          .setLabel("Reload Meme")
-          .setStyle("SECONDARY")
-      );
-      const disabled = new Discord.MessageActionRow().addComponents(
-        new Discord.MessageButton()
-          .setCustomId("reload")
-          .setLabel("Reload Meme")
-          .setStyle("SECONDARY")
-          .setDisabled(true)
-      );
+      };
+      const update = async function (m) {
+        m.edit({
+          embeds: [await embed()],
+        }).catch((e) => console.log(e.requestData.json.embeds));
 
-      let m = await interaction.reply({
+        const collector = m.createMessageComponentCollector({
+          componentType: "BUTTON",
+          time: 120000,
+        });
+        collector.on("collect", async (i) => {
+          if (i.user.id === interaction.user.id) {
+            i.deferUpdate();
+            await update(m);
+            collector.stop();
+          } else {
+            i.reply({
+              content: "These buttons aren't for you!",
+              ephemeral: true,
+            });
+          }
+        });
+        collector.on("end", (mes, r) => {
+          if (r == "time") {
+            m.edit({
+              components: [disabled],
+            });
+          }
+        });
+      };
+      const m = await interaction.reply({
         embeds: [await embed()],
         components: [row],
         fetchReply: true,
@@ -79,7 +106,7 @@ module.exports = {
           collector.stop();
         } else {
           i.reply({
-            content: `These buttons aren't for you!`,
+            content: "These buttons aren't for you!",
             ephemeral: true,
           });
         }
@@ -91,41 +118,10 @@ module.exports = {
           });
         }
       });
-
-      async function update(m) {
-        m.edit({
-          embeds: [await embed()],
-        }).catch((e) => console.log(e.requestData.json.embeds));
-
-        const collector = m.createMessageComponentCollector({
-          componentType: "BUTTON",
-          time: 120000,
-        });
-        collector.on("collect", async (i) => {
-          if (i.user.id === interaction.user.id) {
-            i.deferUpdate();
-            await update(m);
-            collector.stop();
-          } else {
-            i.reply({
-              content: `These buttons aren't for you!`,
-              ephemeral: true,
-            });
-          }
-        });
-        collector.on("end", (mes, r) => {
-          if (r == "time") {
-            m.edit({
-              components: [disabled],
-            });
-          }
-        });
-      }
     } else if (interaction.options.getSubcommand() === "bird") {
-      const fetch = require("node-fetch");
-      async function embed() {
+      const embed = async function () {
         let embed1 = null;
-        await fetch(`https://some-random-api.ml/img/bird`).then((res) =>
+        await fetch("https://some-random-api.ml/img/bird").then((res) =>
           res.json().then((url) => {
             embed1 = new MessageEmbed()
               .setTitle(`Bird image requested by ${interaction.user.username}`)
@@ -135,7 +131,7 @@ module.exports = {
           })
         );
         return embed1;
-      }
+      };
       const row = new Discord.MessageActionRow().addComponents(
         new Discord.MessageButton()
           .setCustomId("reload")
@@ -150,7 +146,7 @@ module.exports = {
           .setDisabled(true)
       );
 
-      let m = await interaction.reply({
+      const m = await interaction.reply({
         embeds: [await embed()],
         components: [row],
         fetchReply: true,
@@ -167,7 +163,7 @@ module.exports = {
           collector.stop();
         } else {
           i.reply({
-            content: `These buttons aren't for you!`,
+            content: "These buttons aren't for you!",
             ephemeral: true,
           });
         }
@@ -180,40 +176,41 @@ module.exports = {
         }
       });
 
-      async function update(m) {
-        m.edit({
-          embeds: [await embed()],
-        }).catch((e) => console.log(e.requestData.json.embeds));
+      const update = async function (mes) {
+        mes
+          .edit({
+            embeds: [await embed()],
+          })
+          .catch((e) => console.log(e.requestData.json.embeds));
 
-        const collector = m.createMessageComponentCollector({
+        const collector2 = mes.createMessageComponentCollector({
           componentType: "BUTTON",
           time: 120000,
         });
-        collector.on("collect", async (i) => {
+        collector2.on("collect", async (i) => {
           if (i.user.id === interaction.user.id) {
             i.deferUpdate();
-            await update(m);
-            collector.stop();
+            await update(mes);
+            collector2.stop();
           } else {
             i.reply({
-              content: `These buttons aren't for you!`,
+              content: "These buttons aren't for you!",
               ephemeral: true,
             });
           }
         });
-        collector.on("end", (mes, r) => {
+        collector2.on("end", (_, r) => {
           if (r == "time") {
-            m.edit({
+            mes.edit({
               components: [disabled],
             });
           }
         });
-      }
+      };
     } else if (interaction.options.getSubcommand() === "cat") {
-      const fetch = require("node-fetch");
-      async function embed() {
+      const embed = async function () {
         let embed1 = null;
-        await fetch(`https://some-random-api.ml/img/cat`).then((res) =>
+        await fetch("https://some-random-api.ml/img/cat").then((res) =>
           res.json().then((url) => {
             embed1 = new MessageEmbed()
               .setTitle(`Cat image requested by ${interaction.user.username}`)
@@ -223,7 +220,7 @@ module.exports = {
           })
         );
         return embed1;
-      }
+      };
       const row = new Discord.MessageActionRow().addComponents(
         new Discord.MessageButton()
           .setCustomId("reload")
@@ -238,7 +235,7 @@ module.exports = {
           .setDisabled(true)
       );
 
-      let m = await interaction.reply({
+      const m = await interaction.reply({
         embeds: [await embed()],
         components: [row],
         fetchReply: true,
@@ -255,7 +252,7 @@ module.exports = {
           collector.stop();
         } else {
           i.reply({
-            content: `These buttons aren't for you!`,
+            content: "These buttons aren't for you!",
             ephemeral: true,
           });
         }
@@ -268,40 +265,41 @@ module.exports = {
         }
       });
 
-      async function update(m) {
-        m.edit({
-          embeds: [await embed()],
-        }).catch((e) => console.log(e.requestData.json.embeds));
+      const update = async function (mes) {
+        mes
+          .edit({
+            embeds: [await embed()],
+          })
+          .catch((e) => console.log(e.requestData.json.embeds));
 
-        const collector = m.createMessageComponentCollector({
+        const collector2 = mes.createMessageComponentCollector({
           componentType: "BUTTON",
           time: 120000,
         });
-        collector.on("collect", async (i) => {
+        collector2.on("collect", async (i) => {
           if (i.user.id === interaction.user.id) {
             i.deferUpdate();
-            await update(m);
-            collector.stop();
+            await update(mes);
+            collector2.stop();
           } else {
             i.reply({
-              content: `These buttons aren't for you!`,
+              content: "These buttons aren't for you!",
               ephemeral: true,
             });
           }
         });
-        collector.on("end", (mes, r) => {
+        collector2.on("end", (_, r) => {
           if (r == "time") {
-            m.edit({
+            mes.edit({
               components: [disabled],
             });
           }
         });
-      }
-    } else if (interaction.options.getSubcommand() === "bird") {
-      const fetch = require("node-fetch");
-      async function embed() {
+      };
+    } else if (interaction.options.getSubcommand() === "dog") {
+      const embed = async function () {
         let embed1 = null;
-        await fetch(`https://some-random-api.ml/img/dog`).then((res) =>
+        await fetch("https://some-random-api.ml/img/dog").then((res) =>
           res.json().then((url) => {
             embed1 = new MessageEmbed()
               .setTitle(`Dog image requested by ${interaction.user.username}`)
@@ -311,7 +309,7 @@ module.exports = {
           })
         );
         return embed1;
-      }
+      };
       const row = new Discord.MessageActionRow().addComponents(
         new Discord.MessageButton()
           .setCustomId("reload")
@@ -326,7 +324,7 @@ module.exports = {
           .setDisabled(true)
       );
 
-      let m = await interaction.reply({
+      const m = await interaction.reply({
         embeds: [await embed()],
         components: [row],
         fetchReply: true,
@@ -343,7 +341,7 @@ module.exports = {
           collector.stop();
         } else {
           i.reply({
-            content: `These buttons aren't for you!`,
+            content: "These buttons aren't for you!",
             ephemeral: true,
           });
         }
@@ -356,41 +354,42 @@ module.exports = {
         }
       });
 
-      async function update(m) {
-        m.edit({
-          embeds: [await embed()],
-        }).catch((e) => console.log(e.requestData.json.embeds));
+      const update = async function (mes) {
+        mes
+          .edit({
+            embeds: [await embed()],
+          })
+          .catch((e) => console.log(e.requestData.json.embeds));
 
-        const collector = m.createMessageComponentCollector({
+        const collector2 = mes.createMessageComponentCollector({
           componentType: "BUTTON",
           time: 120000,
         });
-        collector.on("collect", async (i) => {
+        collector2.on("collect", async (i) => {
           if (i.user.id === interaction.user.id) {
             i.deferUpdate();
-            await update(m);
-            collector.stop();
+            await update(mes);
+            collector2.stop();
           } else {
             i.reply({
-              content: `These buttons aren't for you!`,
+              content: "These buttons aren't for you!",
               ephemeral: true,
             });
           }
         });
-        collector.on("end", (mes, r) => {
+        collector2.on("end", (_, r) => {
           if (r == "time") {
-            m.edit({
+            mes.edit({
               components: [disabled],
             });
           }
         });
-      }
+      };
     } else if (interaction.options.getSubcommand() === "cute") {
       await interaction.deferReply();
-      const fetch = require("node-fetch");
-      async function embed() {
+      const embed = async function () {
         let embed1 = null;
-        await fetch(`https://www.reddit.com/r/aww/top.json?limit=100&t=week`)
+        await fetch("https://www.reddit.com/r/aww/top.json?limit=100&t=week")
           .then((res) => res.json())
           .then((json) => json.data)
           .then((data) => {
@@ -415,7 +414,7 @@ module.exports = {
               });
           });
         return embed1;
-      }
+      };
       const row = new Discord.MessageActionRow().addComponents(
         new Discord.MessageButton()
           .setCustomId("reload")
@@ -430,7 +429,7 @@ module.exports = {
           .setDisabled(true)
       );
       const embe = await embed();
-      let m = await interaction.editReply({
+      const m = await interaction.editReply({
         embeds: [embe],
         components: [row],
         fetchReply: true,
@@ -447,7 +446,7 @@ module.exports = {
           collector.stop();
         } else {
           i.reply({
-            content: `These buttons aren't for you!`,
+            content: "These buttons aren't for you!",
             ephemeral: true,
           });
         }
@@ -460,35 +459,37 @@ module.exports = {
         }
       });
 
-      async function update(m) {
-        m.edit({
-          embeds: [await embed()],
-        }).catch((e) => console.log(e.requestData.json.embeds));
+      const update = async function (mes) {
+        mes
+          .edit({
+            embeds: [await embed()],
+          })
+          .catch((e) => console.log(e.requestData.json.embeds));
 
-        const collector = m.createMessageComponentCollector({
+        const collector2 = mes.createMessageComponentCollector({
           componentType: "BUTTON",
           time: 120000,
         });
-        collector.on("collect", async (i) => {
+        collector2.on("collect", async (i) => {
           if (i.user.id === interaction.user.id) {
             i.deferUpdate();
-            await update(m);
-            collector.stop();
+            await update(mes);
+            collector2.stop();
           } else {
             i.reply({
-              content: `These buttons aren't for you!`,
+              content: "These buttons aren't for you!",
               ephemeral: true,
             });
           }
         });
-        collector.on("end", (mes, r) => {
+        collector2.on("end", (_, r) => {
           if (r == "time") {
-            m.edit({
+            mes.edit({
               components: [disabled],
             });
           }
         });
-      }
+      };
     }
   },
 };

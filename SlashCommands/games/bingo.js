@@ -198,7 +198,7 @@ module.exports = {
         fetchReply: true,
       });
       //2 minutes for users to read through the rules
-      const collector = msg.createMessageComponentCollector({ time: 120000 });
+      let collector = msg.createMessageComponentCollector({ time: 120000 });
       collector.on("collect", async (int) => {
         //user joining the game
         await int.deferReply({ ephemeral: true });
@@ -269,7 +269,7 @@ module.exports = {
       collector.on("end", () => {
         msg.components[0].components[0].disabled = true;
         msg.edit({ components: msg.components });
-        if (!!!games.get(interaction.channel.id).get("players").size) {
+        if (!games.get(interaction.channel.id).get("players").size) {
           games.delete(interaction.channel.id);
           return interaction.followUp("Nobody joined LOL");
         }
@@ -382,7 +382,7 @@ module.exports = {
                   ephemeral: true,
                 });
             };
-            const collector = message.createMessageComponentCollector({
+            collector = message.createMessageComponentCollector({
               filter,
               time: 30000,
             });
@@ -451,7 +451,7 @@ module.exports = {
                     ephemeral: true,
                   });
                 }
-                let row = [
+                const row = [
                   {
                     type: 1,
                     components: [
@@ -524,27 +524,25 @@ module.exports = {
                           )} all had ${topBingo} bingos, but <@${
                             [...topNumsAndBingos.keys()][0]
                           }> has highest number of numbers crossed out(${topNums}), thus they are the winner.`;
-                        else {
-                          //In case theres still a tie
-                          if (
-                            arrayEquals(
-                              [...topNumsAndBingos.keys()],
-                              [...topBingoPeople.keys()]
-                            )
-                          ) {
-                            description = `${formatArray(
-                              [...topNumsAndBingos.keys()].map((e) => `<@${e}>`)
-                            )} all had ${topBingo} bingos and ${topNums} numbers crossed, and thus have tied for first place.`;
-                          } else {
-                            description = `${formatArray(
-                              [...topBingoPeople.keys()].map((e) => `<@${e}>`)
-                            )} had the most number of bingos (${topBingo}) but from these ${formatArray(
-                              [...topNumsAndBingos.keys()].map((e) => `<@${e}>`)
-                            )}had largest number of numbers crossed (${topNums}) and thus these ${
-                              [...topNumsAndBingos.keys()].map((e) => `<@${e}>`)
-                                .length
-                            } have tied for first place.`;
-                          }
+                        //In case theres still a tie
+                        else if (
+                          arrayEquals(
+                            [...topNumsAndBingos.keys()],
+                            [...topBingoPeople.keys()]
+                          )
+                        ) {
+                          description = `${formatArray(
+                            [...topNumsAndBingos.keys()].map((e) => `<@${e}>`)
+                          )} all had ${topBingo} bingos and ${topNums} numbers crossed, and thus have tied for first place.`;
+                        } else {
+                          description = `${formatArray(
+                            [...topBingoPeople.keys()].map((e) => `<@${e}>`)
+                          )} had the most number of bingos (${topBingo}) but from these ${formatArray(
+                            [...topNumsAndBingos.keys()].map((e) => `<@${e}>`)
+                          )}had largest number of numbers crossed (${topNums}) and thus these ${
+                            [...topNumsAndBingos.keys()].map((e) => `<@${e}>`)
+                              .length
+                          } have tied for first place.`;
                         }
                       }
                       clearInterval(
@@ -592,9 +590,9 @@ module.exports = {
                   msg.edit({
                     content: `${i.user}, are you sure you want to end this game?`,
                     components: row.map((e) => {
-                      e.components = e.components.map((i) => {
-                        i.disabled = true;
-                        return i;
+                      e.components = e.components.map((iii) => {
+                        iii.disabled = true;
+                        return iii;
                       });
                       return e;
                     }),
@@ -609,7 +607,7 @@ module.exports = {
                     ephemeral: true,
                   });
                 }
-                let row = [
+                const row = [
                   {
                     type: 1,
                     components: [
@@ -676,9 +674,9 @@ module.exports = {
                   msg.edit({
                     content: `${i.user}, are you sure you want to cancel this game?`,
                     components: row.map((e) => {
-                      e.components = e.components.map((i) => {
-                        i.disabled = true;
-                        return i;
+                      e.components = e.components.map((iii) => {
+                        iii.disabled = true;
+                        return iii;
                       });
                       return e;
                     }),
@@ -741,7 +739,7 @@ module.exports = {
         );
       });
     } else {
-      let embeds = Object.values(gameBoards).map((e) => {
+      const embeds = Object.values(gameBoards).map((e) => {
         const embed = new MessageEmbed()
           .setTitle(`${e.name} Board`)
           .setImage(e.url)

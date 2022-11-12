@@ -11,7 +11,6 @@ module.exports = async (Discord, client, interaction) => {
         ephemeral: true,
       });
 
-    const args = [];
     let profileData;
     try {
       profileData = await profileModel.findOne({ userID: interaction.user.id });
@@ -111,7 +110,7 @@ module.exports = async (Discord, client, interaction) => {
     } catch (err) {
       console.log(err);
     }
-    /* 
+    /*
     await interaction.deferReply({
       ephemeral: false,
     }); */
@@ -125,14 +124,14 @@ module.exports = async (Discord, client, interaction) => {
         ephemeral: true,
       });
       const guildSchema = require("../../models/guildSchema");
-      let gaw = await guildSchema.findOne({
+      const gaw = await guildSchema.findOne({
         "giveaways.giveaways.id": interaction.message.id,
       });
-      let giveaway = gaw.giveaways.giveaways.find(
+      const giveaway = gaw.giveaways.giveaways.find(
         (e) => e.id === interaction.message.id
       );
-      let entries = giveaway.entries;
-      var i,
+      const entries = giveaway.entries;
+      let i,
         j,
         temporary,
         chunk = 25;

@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const yomama = require("../../data/yo-mama");
 module.exports = {
@@ -185,6 +185,7 @@ module.exports = {
         `https://api.truthordarebot.xyz/api/dare?rating=${rating}`
       );
       const body = await res.json();
+      let dare;
       if (translation) dare = body.translations[langs[translation]];
       else dare = body.question;
       if (res.error) {
@@ -212,6 +213,7 @@ module.exports = {
         `https://api.truthordarebot.xyz/api/truth?rating=${rating}`
       );
       const body = await res.json();
+      let truth;
       if (translation) truth = body.translations[langs[translation]];
       else truth = body.question;
       if (res.error) {
@@ -238,6 +240,7 @@ module.exports = {
         `https://api.truthordarebot.xyz/api/wyr?rating=${rating}`
       );
       const body = await res.json();
+      let wouldyourather;
       if (translation) wouldyourather = body.translations[langs[translation]];
       else wouldyourather = body.question;
       if (res.error) {
@@ -257,8 +260,8 @@ module.exports = {
       interaction.options.getSubcommandGroup() === "ratemachine"
     ) {
       const user = interaction.options.getUser("user") || interaction.user;
-      let gayrate = Math.floor(Math.random() * 101);
-      let argsEmbed = new MessageEmbed()
+      const gayrate = Math.floor(Math.random() * 101);
+      const argsEmbed = new MessageEmbed()
         .setTitle("Gayrate Machine")
         .setColor("#000000")
         .setDescription(`${user.username} is \`${gayrate}%\` gay! 🏳️‍🌈`)
@@ -274,8 +277,8 @@ module.exports = {
       interaction.options.getSubcommandGroup() === "ratemachine"
     ) {
       const user = interaction.options.getUser("user") || interaction.user;
-      let gayrate = Math.floor(Math.random() * 101);
-      let argsEmbed = new MessageEmbed()
+      const gayrate = Math.floor(Math.random() * 101);
+      const argsEmbed = new MessageEmbed()
         .setTitle("Simprate Machine")
         .setColor("#000000")
         .setDescription(`${user.username} is \`${gayrate}%\` simp! 🏳️‍🌈`)
@@ -291,8 +294,8 @@ module.exports = {
       interaction.options.getSubcommandGroup() === "ratemachine"
     ) {
       const user = interaction.options.getUser("user") || interaction.user;
-      let gayrate = Math.floor(Math.random() * 101);
-      let argsEmbed = new MessageEmbed()
+      const gayrate = Math.floor(Math.random() * 101);
+      const argsEmbed = new MessageEmbed()
         .setTitle("Gamerrate Machine")
         .setColor("#000000")
         .setDescription(`${user.username} is \`${gayrate}%\` gamer! 🏳️‍🌈`)

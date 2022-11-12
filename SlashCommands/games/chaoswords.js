@@ -1,10 +1,10 @@
 const games = [];
-var dictionaryarray = require("an-array-of-english-words");
+const dictionaryarray = require("an-array-of-english-words");
 function randomString(length) {
-  var result = "";
-  var characters = "abcdefghijklmnopqrstuvwxyz";
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
+  let result = "";
+  const characters = "abcdefghijklmnopqrstuvwxyz";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
@@ -37,7 +37,7 @@ module.exports = {
           .setDescription(
             `String - ${string}\n You have 30 seconds to find a word in the string.`
           )
-          .setColor(`RANDOM`),
+          .setColor("RANDOM"),
       ],
       fetchReply: true,
     });
@@ -51,7 +51,7 @@ module.exports = {
               .setDescription(
                 `String - ${string}\n${m.author.tag} has figured out the word - ${word}.`
               )
-              .setColor(`RANDOM`),
+              .setColor("RANDOM"),
           ],
         });
         collector.stop("win");
@@ -67,7 +67,7 @@ module.exports = {
               .setDescription(
                 `String - ${string}\nNobody was able to figure out the word. It was ${word}.`
               )
-              .setColor(`RANDOM`),
+              .setColor("RANDOM"),
           ],
         });
       }

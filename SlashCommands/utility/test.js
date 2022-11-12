@@ -203,7 +203,7 @@ module.exports = {
         if (blacklistrolefinderr) return;
         requirements.blacklistroles = blacklistroles2;
       }
-      let requirementString = ``;
+      let requirementString = "";
       if (requirements.amari) {
         requirementString += `\u2001\u2001<:bp_dot:918074237992988722>Amari level: ${amarilvl}\n`;
       }
@@ -238,16 +238,16 @@ module.exports = {
       const emo = "🎉";
       const createRow = new Discord.MessageActionRow().addComponents(
         new Discord.MessageButton()
-          .setLabel(`0`)
+          .setLabel("0")
           .setCustomId("gaw-join")
           .setEmoji(emo)
           .setStyle("SUCCESS"),
         new Discord.MessageButton()
-          .setLabel(`End`)
+          .setLabel("End")
           .setCustomId("gaw-end")
           .setStyle("SECONDARY"),
         new Discord.MessageButton()
-          .setLabel(`Entries`)
+          .setLabel("Entries")
           .setCustomId("gaw-entries")
           .setStyle("SECONDARY")
       );
@@ -272,7 +272,7 @@ module.exports = {
         { GuildID: interaction.guild.id },
         {
           $push: {
-            'giveaways.giveaways': {
+            "giveaways.giveaways": {
               id: msg.id,
               prize,
               requirements,

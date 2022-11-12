@@ -1,8 +1,8 @@
 const emotes = {
-  online: `<:online:944091415351263353>`,
-  dnd: `<:dnd:944091478735585330>`,
-  offline: `<:offline:944091500097183815>`,
-  idle: `<:idle:944091516035543051>`,
+  online: "<:online:944091415351263353>",
+  dnd: "<:dnd:944091478735585330>",
+  offline: "<:offline:944091500097183815>",
+  idle: "<:idle:944091516035543051>",
 };
 const flags = {
   DISCORD_EMPLOYEE: "<:discordemployee:931530420800061530>",
@@ -24,8 +24,8 @@ module.exports = {
   type: "USER",
   execute(interaction) {
     const user = interaction.guild.members.cache.get(interaction.targetId);
-    let badge = user.user.flags.toArray();
-    let badges = badge.length
+    const badge = user.user.flags.toArray();
+    const badges = badge.length
       ? badge.map((f) => flags[f]).join(" ")
       : "No Badges";
     let temp = 0;
@@ -35,7 +35,7 @@ module.exports = {
     if (status === "online") status = emotes["online"];
     if (status === "offline" || status === "invisible" || status === undefined)
       status = emotes["offline"];
-    let activity = user.presence?.activities[0]?.name || "No Activity";
+    const activity = user.presence?.activities[0]?.name || "No Activity";
     const roles = user.roles.cache
       .sort((a, b) => b.position - a.position)
       .map((r) => {
@@ -62,7 +62,7 @@ module.exports = {
             return !e;
           }).length
         } more`;
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setTitle(`${user.user.username}`)
       .setThumbnail(
         user.displayAvatarURL({

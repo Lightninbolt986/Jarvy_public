@@ -12,7 +12,6 @@ const {
   MessageActionRow,
   MessageButton,
   MessageEmbed,
-  CommandInteraction,
 } = require("discord.js");
 function arrayMove(array, fromIndex, toIndex) {
   array = [...array];
@@ -60,10 +59,10 @@ module.exports = {
     },
   ],
   async execute(interaction) {
-    let gamemode = interaction.options.getString("gamemode");
-    let prize = interaction.options.getString("prize") || "Nothing";
+    const gamemode = interaction.options.getString("gamemode");
+    const prize = interaction.options.getString("prize") || "Nothing";
     //You need to change the emote ids (and name if you rename them) after stealing them in another server
-    let emos = {
+    const emos = {
       car: [
         "<:carv:894504695127740457>", //https://cdn.discordapp.com/emojis/894504695127740457.png?size=80
         "<:carg:894504648969441330>", //https://cdn.discordapp.com/emojis/894504648969441330.png?size=80

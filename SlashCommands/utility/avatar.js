@@ -1,4 +1,4 @@
-const Discord = require('discord.js')
+const Discord = require("discord.js");
 module.exports = {
   name: "avatar",
   aliases: ["icon", "pfp", "profilepic", "av"],
@@ -11,8 +11,8 @@ module.exports = {
       required: false,
     },
   ],
-  async execute(interaction, client) {
-    const user = interaction.options.getUser('user') || interaction.user;
+  async execute(interaction) {
+    const user = interaction.options.getUser("user") || interaction.user;
     const pngFormat = user.displayAvatarURL({
       format: "png",
     });

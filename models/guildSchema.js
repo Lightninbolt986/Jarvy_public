@@ -9,4 +9,4 @@ const GuildSchema = new mongoose.Schema({
   giveaways: { type: Object },
 });
 
-const MessageModel = (module.exports = mongoose.model("guilds", GuildSchema));
+module.exports = mongoose.model("guilds", GuildSchema);

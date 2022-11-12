@@ -3,11 +3,7 @@ module.exports = {
   aliases: ["fe"],
   description: "Find a emoji on [emoji.gg](https://emoji.gg)",
   async execute(message, args, cmd, client, Discord) {
-    const {
-      MessageActionRow,
-      MessageButton,
-      MessageEmbed,
-    } = require("discord.js");
+    const { MessageActionRow, MessageButton } = require("discord.js");
     const fetch = require("node-fetch");
     const late = new Discord.MessageEmbed()
       .setDescription(
@@ -15,9 +11,11 @@ module.exports = {
       )
       .setColor("#f4a1ff");
 
-    let emojis = await fetch("https://emoji.gg/api/").then((res) => res.json());
+    const emojis = await fetch("https://emoji.gg/api/").then((res) =>
+      res.json()
+    );
     const q = args.join(" ").toLowerCase().trim().split(" ").join("_");
-    let matches = emojis.filter((s) => s.title == q || s.title.includes(q));
+    const matches = emojis.filter((s) => s.title == q || s.title.includes(q));
 
     const noResult = new Discord.MessageEmbed()
       .setDescription(
@@ -28,27 +26,27 @@ module.exports = {
     if (!matches.length) return message.channel.send({ embeds: [noResult] });
     let page = 0;
 
-    const findurl = "https://discordemoji.com/emoji/" + matches[page].slug;
-    const match = matches[page].title;
+    let findurl = "https://discordemoji.com/emoji/" + matches[page].slug;
+    let match = matches[page].title;
     const emo1 = {
       wholething: "<:neox_leftarrow:877767124544782368>",
-      name: `neox_leftarrow`,
-      id: `877767124544782368`,
+      name: "neox_leftarrow",
+      id: "877767124544782368",
     };
     const emo2 = {
       wholething: "<:neox_rightarrow:877765155230994482>",
-      name: `neox_rightarrow`,
-      id: `877765155230994482`,
+      name: "neox_rightarrow",
+      id: "877765155230994482",
     };
     const emo3 = {
       wholething: "<:neox_plus:877767309891084308>",
-      name: `neox_plus`,
-      id: `877767309891084308`,
+      name: "neox_plus",
+      id: "877767309891084308",
     };
     const emo4 = {
       wholething: "<:neox_cross:877767362458304543>",
-      name: `neox_cross`,
-      id: `877767362458304543`,
+      name: "neox_cross",
+      id: "877767362458304543",
     };
     const btn1 = new MessageButton()
       .setEmoji(emo1.id)
@@ -90,15 +88,13 @@ module.exports = {
             msg.react(emo2.id);
             msg.react(emo3.id);
             msg.react(emo4.id);*/
-
-    let doing = true;
     const collector = msg.createMessageComponentCollector({
       time: 60000,
     });
     collector.on("collect", async (i) => {
       if (!i.user.id === i.user.id) {
         return i.reply({
-          content: `These buttons aren't for you!`,
+          content: "These buttons aren't for you!",
           ephemeral: true,
         });
       } else if (i.customId == emo1.name) {
@@ -106,9 +102,8 @@ module.exports = {
         if (!matches[page]) {
           page++;
         } else {
-          const findurl =
-            "https://discordemoji.com/emoji/" + matches[page].slug;
-          const match = matches[page].title;
+          findurl = "https://discordemoji.com/emoji/" + matches[page].slug;
+          match = matches[page].title;
           const newembed = new Discord.MessageEmbed()
 
             .setDescription(
@@ -126,9 +121,8 @@ module.exports = {
         if (!matches[page]) {
           page--;
         } else {
-          const findurl =
-            "https://discordemoji.com/emoji/" + matches[page].slug;
-          const match = matches[page].title;
+          findurl = "https://discordemoji.com/emoji/" + matches[page].slug;
+          match = matches[page].title;
           const newembed = new Discord.MessageEmbed()
             .setDescription(
               `**<a:neo_greentick:876391533920813086> Emoji results for ${args
@@ -153,8 +147,6 @@ module.exports = {
           i.reply(
             `<:neo_cross:877535678597050398> Unable to add ${res.title}.`
           );
-
-          return (doing = false);
         }
         const stealembed = new Discord.MessageEmbed()
           .setColor("#a8f1ff")
@@ -165,8 +157,6 @@ module.exports = {
           .setFooter("Emotes by Bunny#1111")
           .setTimestamp();
         i.update({ embeds: [stealembed], components: [] });
-
-        doing = false;
       } else if (i.customId == emo4.name) {
         const cancel = new Discord.MessageEmbed()
           .setDescription(
@@ -179,7 +169,6 @@ module.exports = {
 
     collector.on("end", () => {
       msg.edit({ embeds: [late], components: [] });
-      doing = false;
       return;
     });
   },

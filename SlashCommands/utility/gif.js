@@ -11,13 +11,13 @@ module.exports = {
       type: "STRING",
     },
   ],
-  async execute(interaction, client) {
+  async execute(interaction) {
     const term = interaction.options.getString("term");
     await interaction.deferReply();
     giphy.search(term).then(function (res) {
       // Res contains gif data!
-      let id = res.data[0].id;
-      let msgurl = `https://media.giphy.com/media/${id}/giphy.gif`;
+      const id = res.data[0].id;
+      const msgurl = `https://media.giphy.com/media/${id}/giphy.gif`;
       const embed = {
         color: 3066993,
         timestamp: new Date(),

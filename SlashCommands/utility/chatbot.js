@@ -11,8 +11,8 @@ module.exports = {
       required: true,
     },
   ],
-  async execute(interaction, client) {
-    let mesg = interaction.options.getString("message");
+  async execute(interaction) {
+    const mesg = interaction.options.getString("message");
     await interaction.deferReply();
     try {
       fetch(

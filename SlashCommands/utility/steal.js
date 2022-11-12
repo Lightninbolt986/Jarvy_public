@@ -36,7 +36,7 @@ module.exports = {
           await interaction.guild.emojis.create(emoji, name || "give_name");
 
           const embed = new MessageEmbed()
-            .setTitle(`Emoji Added`)
+            .setTitle("Emoji Added")
             .setThumbnail(`${emoji}`)
             .setColor("RANDOM")
             .setDescription(
@@ -72,14 +72,14 @@ module.exports = {
           if (!foundEmoji[0]) {
             const embed = new MessageEmbed()
               .setDescription(
-                `Please provide a valid emoji. I can't work with this bs`
+                "Please provide a valid emoji. I can't work with this bs"
               )
               .setColor("RANDOM");
             return interaction.editReply({ embeds: [embed] });
           }
           const embed = new MessageEmbed()
             .setDescription(
-              `Bruv this is a normal emoji what you can use anywhere`
+              "Bruv this is a normal emoji what you can use anywhere"
             )
             .setColor("RANDOM");
           interaction.editReply({ embeds: [embed] });
@@ -91,13 +91,13 @@ module.exports = {
           )
         ) {
           const embed = new MessageEmbed()
-            .setDescription(`Maximum emoji count reached for this Server!`)
+            .setDescription("Maximum emoji count reached for this Server!")
             .setColor("RANDOM");
 
           return interaction.editReply({ embeds: [embed] });
         } else if (String(e).includes("Invalid Form Body")) {
           const embed = new MessageEmbed()
-            .setDescription(`Invalid name, no spaces allowed`)
+            .setDescription("Invalid name, no spaces allowed")
             .setColor("RANDOM");
 
           return interaction.editReply({ embeds: [embed] });

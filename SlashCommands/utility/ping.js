@@ -1,13 +1,13 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = {
-  name: 'ping',
-  description: 'You need a description for this?',
-  type: 'CHAT_INPUT',
+  name: "ping",
+  description: "You need a description for this?",
+  type: "CHAT_INPUT",
   async execute(interaction) {
 
     const messagePing = Date.now();
-    await interaction.reply('Loading...');
+    await interaction.reply("Loading...");
     const endMessagePing = Date.now() - messagePing;
 
     const embed = new MessageEmbed()
@@ -16,7 +16,7 @@ module.exports = {
                      Message ping: \`${endMessagePing}ms\`
                    `
       )
-      .setColor('GREEN')
+      .setColor("GREEN")
       .setTimestamp();
 
     interaction.editReply({
@@ -25,4 +25,4 @@ module.exports = {
     });
 
   }
-}
+};

@@ -1,3 +1,3 @@
-module.exports = () =>{
+module.exports = () => {
   console.log("I'm online");
-}
+};

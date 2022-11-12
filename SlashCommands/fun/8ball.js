@@ -12,9 +12,9 @@ module.exports = {
     },
   ],
   async execute(interaction) {
-    let query = interaction.options.getString("question");
+    const query = interaction.options.getString("question");
 
-    var req = unirest("get", "https://8ball.delegator.com/magic/JSON/" + query);
+    const req = unirest("get", "https://8ball.delegator.com/magic/JSON/" + query);
 
     req.end((res) => {
       interaction.reply({

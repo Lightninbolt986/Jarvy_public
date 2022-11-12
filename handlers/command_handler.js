@@ -1,4 +1,4 @@
-module.exports = (client, Discord) => {
+module.exports = (client) => {
   const glob = require("glob");
   glob(`${__dirname}/../commands/**/*.js`, async (err, filePaths) => {
     if (err) return console.log(err);
@@ -7,8 +7,8 @@ module.exports = (client, Discord) => {
       const pull = require(file);
       if (pull.name) {
         client.commands.set(pull.name, pull);
-        console.log(`✅ ${pull.name} loaded`)
+        console.log(`✅ ${pull.name} loaded`);
       }
     });
   });
-}
+};

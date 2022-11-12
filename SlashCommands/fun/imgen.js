@@ -461,7 +461,7 @@ module.exports = {
         const dagpicl = client.dagpi;
 
         const user = interaction.options.getUser("user") || interaction.user;
-        var url = user.displayAvatarURL({ size: 1024, dynamic: true });
+        let url = user.displayAvatarURL({ size: 1024, dynamic: true });
         url = url.replace(".webp", ".png");
         const img = await dagpicl.image_process(type, { url: url });
         const attach = new MessageAttachment(img.image, `output.${img.format}`);
@@ -475,7 +475,7 @@ module.exports = {
       try {
         const dagpicl = client.dagpi;
         const user = interaction.options.getUser("user") || interaction.user;
-        var url = user.displayAvatarURL({ size: 1024, dynamic: true });
+        let url = user.displayAvatarURL({ size: 1024, dynamic: true });
         url = url.replace(".webp", ".png");
         const img = await dagpicl.image_process("pride", { url, flag });
         const attach = new MessageAttachment(img.image, `output.${img.format}`);
@@ -489,8 +489,8 @@ module.exports = {
       await interaction.deferReply();
       try {
         const dagpicl = client.dagpi;
-        var url3 = user.displayAvatarURL({ size: 1024, dynamic: true });
-        var url4 = user2.displayAvatarURL({ size: 1024, dynamic: true });
+        const url3 = user.displayAvatarURL({ size: 1024, dynamic: true });
+        const url4 = user2.displayAvatarURL({ size: 1024, dynamic: true });
         const url = url3.replace(".webp", ".png");
         const url2 = url4.replace(".webp", ".png");
         const img = await dagpicl.image_process("5g1g", { url, url2 });
@@ -507,8 +507,8 @@ module.exports = {
       await interaction.deferReply();
       try {
         const dagpicl = client.dagpi;
-        var url3 = user.displayAvatarURL({ size: 1024, dynamic: true });
-        var url4 = user2.displayAvatarURL({ size: 1024, dynamic: true });
+        const url3 = user.displayAvatarURL({ size: 1024, dynamic: true });
+        const url4 = user2.displayAvatarURL({ size: 1024, dynamic: true });
         const url = url4.replace(".webp", ".png");
         const url2 = url3.replace(".webp", ".png");
         const img = await dagpicl.image_process("whyareyougay", { url, url2 });
@@ -524,8 +524,8 @@ module.exports = {
       await interaction.deferReply();
       try {
         const dagpicl = client.dagpi;
-        var url3 = user.displayAvatarURL({ size: 1024, dynamic: true });
-        var url4 = user2.displayAvatarURL({ size: 1024, dynamic: true });
+        const url3 = user.displayAvatarURL({ size: 1024, dynamic: true });
+        const url4 = user2.displayAvatarURL({ size: 1024, dynamic: true });
         const url = url3.replace(".webp", ".png");
         const url2 = url4.replace(".webp", ".png");
         const img = await dagpicl.image_process("slap", { url, url2 });
@@ -543,7 +543,7 @@ module.exports = {
       await interaction.deferReply();
       try {
         const dagpicl = client.dagpi;
-        var url = user.displayAvatarURL({ size: 1024, dynamic: true });
+        let url = user.displayAvatarURL({ size: 1024, dynamic: true });
         url = url.replace(".webp", ".png");
         const img = await dagpicl.image_process("tweet", {
           url,
@@ -565,7 +565,7 @@ module.exports = {
       await interaction.deferReply();
       try {
         const dagpicl = client.dagpi;
-        var url = user.displayAvatarURL({ size: 1024, dynamic: true });
+        let url = user.displayAvatarURL({ size: 1024, dynamic: true });
         url = url.replace(".webp", ".png");
         const img = await dagpicl.image_process("discord", {
           url,
@@ -588,7 +588,7 @@ module.exports = {
       await interaction.deferReply();
       try {
         const dagpicl = client.dagpi;
-        var url = user.displayAvatarURL({ size: 1024, dynamic: true });
+        let url = user.displayAvatarURL({ size: 1024, dynamic: true });
         url = url.replace(".webp", ".png");
         const img = await dagpicl.image_process("yt", {
           url,

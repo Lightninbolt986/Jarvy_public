@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 module.exports = {
   name: "chatchart",
   description:
@@ -8,7 +8,7 @@ module.exports = {
     const pEmbed = new Discord.MessageEmbed()
       .setColor("#a8f1ff")
       .setDescription(
-        `**Fetching the past 5000 messages** <a:neo_loading:877035130076659762>`
+        "**Fetching the past 5000 messages** <a:neo_loading:877035130076659762>"
       )
       .setFooter("This might take time");
     const msg = await interaction.reply({
@@ -16,36 +16,34 @@ module.exports = {
       fetchReply: true,
     });
     try {
-      let authors = [];
+      const authors = [];
       const list = await fetchMore(interaction.channel, 5000);
       const arraylist = Array.from(list);
 
       arraylist.forEach((array) => {
         authors.push(array[1].author.id);
       });
-      let frequency = {};
+      const frequency = {};
       authors.forEach(function (item) {
         frequency[item] = frequency[item] ? frequency[item] + 1 : 1;
       });
-      let intents = Object.entries(frequency)
+      const intents = Object.entries(frequency)
         .sort((a, b) => b[1] - a[1])
         .map(function (x) {
           return x[0];
         });
-      let finalthingyig = {};
-      let chartlabels = [];
+      const finalthingyig = {};
+      const chartlabels = [];
       for (const u of intents) {
         try {
           const newe = await client.users.fetch(u);
           if (newe.bot) continue;
           if (frequency[u] > 200) {
             finalthingyig[newe.tag] = frequency[u];
-          } else {
-            if (finalthingyig["Others"]) {
-              finalthingyig["Others"] = finalthingyig["Others"] + frequency[u];
-            } else finalthingyig["Others"] = frequency[u];
-          }
-        } catch (e) {}
+          } else if (finalthingyig["Others"]) {
+            finalthingyig["Others"] = finalthingyig["Others"] + frequency[u];
+          } else finalthingyig["Others"] = frequency[u];
+        } catch (e) { /* empty */ }
       }
       for (let i = 0; i < Object.keys(finalthingyig).length; i++) {
         chartlabels.push({
@@ -55,7 +53,7 @@ module.exports = {
       }
       if (Object.keys(finalthingyig).length < 3)
         return interaction.channel.messages.edit(msg.id, {
-          content: `Just 2 people lol`,
+          content: "Just 2 people lol",
           embeds: [],
         });
       const chart = new PieChart({
@@ -67,22 +65,22 @@ module.exports = {
       const attachment = new Discord.MessageAttachment(buffer, "chart.png");
 
       const embed = new Discord.MessageEmbed()
-        .setTitle(`**Chatchart of the past 5000 messages in this channel**`)
+        .setTitle("**Chatchart of the past 5000 messages in this channel**")
         .setColor("#a8f1ff")
         .setDescription(
           `<:neo_podium:877031994192691310>│**STANDINGS:**\n
   <:neo_gold:877031189985230868>│**${Object.keys(finalthingyig)[0]}** - \`${
-            Object.values(finalthingyig)[0]
-          } [${Object.values(finalthingyig)[0] / 5}%]\`
+  Object.values(finalthingyig)[0]
+} [${Object.values(finalthingyig)[0] / 5}%]\`
   <:neo_silver:877030960070262794>│**${Object.keys(finalthingyig)[1]}** - \`${
-            Object.values(finalthingyig)[1]
-          } [${Object.values(finalthingyig)[1] / 5}%]\`
+  Object.values(finalthingyig)[1]
+} [${Object.values(finalthingyig)[1] / 5}%]\`
   <:neo_bronze:877030829732298784>│**${Object.keys(finalthingyig)[2]}** - \`${
-            Object.values(finalthingyig)[2]
-          } [${Object.values(finalthingyig)[2] / 5}%]\``
+  Object.values(finalthingyig)[2]
+} [${Object.values(finalthingyig)[2] / 5}%]\``
         )
         .setImage("attachment://chart.png")
-        .setFooter(`The numbers might not add up as it does not display bots`);
+        .setFooter("The numbers might not add up as it does not display bots");
       interaction.editReply({
         embeds: [embed],
         files: [attachment],
@@ -103,7 +101,7 @@ module.exports = {
 
       let collection = new Discord.Collection();
       let lastId = null;
-      let options = {};
+      const options = {};
       let remaining = limit;
 
       while (remaining > 0) {
@@ -114,7 +112,7 @@ module.exports = {
           options.before = lastId;
         }
 
-        let messages = await channel.messages.fetch(options);
+        const messages = await channel.messages.fetch(options);
 
         if (!messages.last()) {
           break;

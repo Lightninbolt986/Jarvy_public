@@ -191,8 +191,8 @@ module.exports = {
         avatar: user.user.displayAvatarURL({ dynamic: true }),
         reason: `${interaction.user.username} used the sudo command!`,
       });
-      let webhooks = await interaction.channel.fetchWebhooks();
-      let webhook = webhooks.last();
+      const webhooks = await interaction.channel.fetchWebhooks();
+      const webhook = webhooks.last();
       interaction.editReply({ content: "done!", ephemeral: true });
       await webhook.send({
         content: content,
@@ -201,35 +201,29 @@ module.exports = {
       });
     } else if (interaction.options.getSubcommand() === "emotelist") {
       let Emojis = [];
-      let EmojisAnimated = [];
-      let EmojiCount = 0;
-      let Animated = 0;
+      const EmojisAnimated = [];
       let OverallEmojis = 0;
-      let embed = {};
-      let embedslist = [];
+      const embed = {};
+      const embedslist = [];
 
-      function Emoji(id) {
+      const Emoji = function (id) {
         return client.emojis.cache.get(id).toString();
-      }
+      };
       interaction.guild.emojis.cache.forEach((emoji) => {
         OverallEmojis++;
         if (emoji.animated) {
-          Animated++;
           EmojisAnimated.push(
             `${Emoji(emoji.id)}│\`${emoji.id}\` - \`${emoji.name}\``
           );
         } else {
-          EmojiCount++;
           Emojis.push(`${Emoji(emoji.id)}│\`${emoji.id}\` - \`${emoji.name}\``);
         }
       });
       if (!OverallEmojis > 1)
         return interaction.reply({ content: "No emos lmao", ephemeral: true });
       Emojis = Emojis.concat(EmojisAnimated);
-      var i,
-        j,
-        temporary,
-        chunk = 25;
+      let i, j, temporary;
+      const chunk = 25;
       for (i = 0, j = Emojis.length; i < j; i += chunk) {
         temporary = Emojis.slice(i, i + chunk);
         embed[`${i / 25}`] = new MessageEmbed()
@@ -237,22 +231,12 @@ module.exports = {
             name: `Emojis in ${interaction.guild.name}`,
             iconURL: `${interaction.guild.iconURL({ dynamic: true })}`,
           })
-          .setDescription(`${temporary.join(`\n`)}`)
+          .setDescription(`${temporary.join("\n")}`)
           .setColor("BLURPLE");
       }
-      for (let i = 0; i < Object.keys(embed).length; i++) {
+      for (i = 0; i < Object.keys(embed).length; i++) {
         embedslist.push(embed[i]);
       }
-      const button1 = new MessageButton()
-        .setCustomId("previousbtn")
-        .setEmoji("<:neox_leftarrow:877767124544782368>")
-        .setStyle("SECONDARY");
-
-      const button2 = new MessageButton()
-        .setCustomId("nextbtn")
-        .setEmoji("<:neox_rightarrow:877765155230994482>")
-        .setStyle("SECONDARY");
-      buttonList = [button1, button2];
 
       paginate(embedslist, interaction);
     } else if (interaction.options.getSubcommand() === "findemoji") {
@@ -263,12 +247,12 @@ module.exports = {
         )
         .setColor("#f4a1ff");
       await interaction.deferReply();
-      let emojis = await fetch("https://emoji.gg/api/").then((res) =>
+      const emojis = await fetch("https://emoji.gg/api/").then((res) =>
         res.json()
       );
       const rt = interaction.options.getString("emoji");
       const q = rt.split(" ").join("_");
-      let matches = emojis.filter((s) => s.title == q || s.title.includes(q));
+      const matches = emojis.filter((s) => s.title == q || s.title.includes(q));
 
       const noResult = new MessageEmbed()
         .setDescription(
@@ -283,27 +267,27 @@ module.exports = {
         });
       let page = 0;
 
-      const findurl = "https://discordemoji.com/emoji/" + matches[page].slug;
-      const match = matches[page].title;
+      let findurl = "https://discordemoji.com/emoji/" + matches[page].slug;
+      let match = matches[page].title;
       const emo1 = {
         wholething: "<:neox_leftarrow:877767124544782368>",
-        name: `neox_leftarrow`,
-        id: `877767124544782368`,
+        name: "neox_leftarrow",
+        id: "877767124544782368",
       };
       const emo2 = {
         wholething: "<:neox_rightarrow:877765155230994482>",
-        name: `neox_rightarrow`,
-        id: `877765155230994482`,
+        name: "neox_rightarrow",
+        id: "877765155230994482",
       };
       const emo3 = {
         wholething: "<:neox_plus:877767309891084308>",
-        name: `neox_plus`,
-        id: `877767309891084308`,
+        name: "neox_plus",
+        id: "877767309891084308",
       };
       const emo4 = {
         wholething: "<:neox_cross:1019553493150879806>",
-        name: `neox_cross`,
-        id: `1019553493150879806`,
+        name: "neox_cross",
+        id: "1019553493150879806",
       };
       const btn1 = new MessageButton()
         .setEmoji(emo1.id)
@@ -344,14 +328,13 @@ module.exports = {
         components: [row],
       });
 
-      let doing = true;
       const collector = msg.createMessageComponentCollector({
         time: 60000,
       });
       collector.on("collect", async (i) => {
         if (!i.user.id === i.user.id) {
           return i.reply({
-            content: `These buttons aren't for you!`,
+            content: "These buttons aren't for you!",
             ephemeral: true,
           });
         } else if (i.customId == emo1.name) {
@@ -359,9 +342,8 @@ module.exports = {
           if (!matches[page]) {
             page++;
           } else {
-            const findurl =
-              "https://discordemoji.com/emoji/" + matches[page].slug;
-            const match = matches[page].title;
+            findurl = "https://discordemoji.com/emoji/" + matches[page].slug;
+            match = matches[page].title;
             const newembed = new MessageEmbed()
 
               .setDescription(
@@ -377,9 +359,8 @@ module.exports = {
           if (!matches[page]) {
             page--;
           } else {
-            const findurl =
-              "https://discordemoji.com/emoji/" + matches[page].slug;
-            const match = matches[page].title;
+            findurl = "https://discordemoji.com/emoji/" + matches[page].slug;
+            match = matches[page].title;
             const newembed = new MessageEmbed()
               .setDescription(
                 `**<a:neo_greentick:876391533920813086> Emoji results for ${rt}**\n<:neo_replycontblue:876339530708426754> Emoji name: \`${match}\`\n<:neo_replyblue:876339294611050576> Emoji Link: [Click Here](${findurl})`
@@ -403,8 +384,6 @@ module.exports = {
             i.reply(
               `<:neo_cross:877535678597050398> Unable to add ${res.title}.`
             );
-
-            return (doing = false);
           }
           const stealembed = new MessageEmbed()
             .setColor("#a8f1ff")
@@ -415,8 +394,6 @@ module.exports = {
             .setFooter({ text: "Emotes by Bunny#1111" })
             .setTimestamp();
           i.update({ embeds: [stealembed], components: [] });
-
-          doing = false;
         } else if (i.customId == emo4.name) {
           const cancel = new MessageEmbed()
             .setDescription(
@@ -429,12 +406,11 @@ module.exports = {
 
       collector.on("end", () => {
         msg.edit({ embeds: [late], components: [] });
-        doing = false;
         return;
       });
     } else if (interaction.options.getSubcommand() === "hastebin") {
       const hastebin = require("hastebin-gen");
-      let haste = interaction.options.getString("text");
+      const haste = interaction.options.getString("text");
       await interaction.deferReply({ ephemeral: true });
       hastebin(haste)
         .then((r) => {

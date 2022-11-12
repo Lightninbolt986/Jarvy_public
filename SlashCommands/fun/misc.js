@@ -103,7 +103,7 @@ module.exports = {
       interaction.reply({ content: string.split(" ").join(":clap:") });
     } else if (interaction.options.getSubcommand() === "cowsay") {
       const splitMessage = interaction.options.getString("string");
-      var req = unirest(
+      const req = unirest(
         "GET",
         "http://cowsay.morecode.org/say?message=" +
           encodeURIComponent(splitMessage) +
@@ -188,7 +188,7 @@ module.exports = {
         7: "\u3125",
         "&": "\u214b",
         ".": "\u02d9",
-        '"': "\u201e",
+        "\"": "\u201e",
         ";": "\u061b",
         "[": "]",
         "(": ")",
@@ -243,21 +243,21 @@ module.exports = {
         const c = [];
         for (let a, d = 0, e = str.length; d < e; d++) {
           (a = str.charAt(d)),
-            d > 0 &&
+          d > 0 &&
             (a == "\u0324" || a == "\u0317" || a == "\u0316" || a == "\u032e")
-              ? ((a = flip[str.charAt(d - 1) + a]), c.pop())
-              : ((a = flip[a]), typeof a == "undefined" && (a = str.charAt(d))),
-            c.push(a);
+            ? ((a = flip[str.charAt(d - 1) + a]), c.pop())
+            : ((a = flip[a]), typeof a == "undefined" && (a = str.charAt(d))),
+          c.push(a);
         }
         return c.reverse().join("");
       };
       interaction.reply({ content: flipword(string) });
     } else if (interaction.options.getSubcommand() === "hack") {
-      let user =
+      const user =
         interaction.options.getUser("user").username ||
         interaction.user.username;
 
-      let text = [
+      const text = [
         `Getting ${user}'s **Mobile phone number**..`,
         `Getting ${user}'s **Gmails**..`,
         `Sending **VIRUS** into ${user}`,
@@ -267,13 +267,13 @@ module.exports = {
       ];
 
       let current = 0;
-      let count = text.length;
-      let editTime = 3000;
+      const count = text.length;
+      const editTime = 3000;
 
       interaction
         .reply({ content: `Checking ${user}'s acc`, fetchReply: true })
         .then(() => {
-          let interval = setInterval(() => {
+          const interval = setInterval(() => {
             if (current === count) {
               interaction.editReply({
                 content: `**Successfull hacked ${user}'s acc !!**`,
@@ -282,7 +282,7 @@ module.exports = {
               return;
             }
 
-            let hackMsg = text[current];
+            const hackMsg = text[current];
             interaction.editReply({ content: hackMsg });
             current++;
           }, editTime);

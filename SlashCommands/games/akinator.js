@@ -34,12 +34,12 @@ module.exports = {
   async execute(interaction, client) {
     // try {
 
-    let usertag = interaction.user.tag;
-    let avatar = interaction.user.displayAvatarURL();
+    const usertag = interaction.user.tag;
+    const avatar = interaction.user.displayAvatarURL();
     if (isPlaying.has(interaction.user.id)) {
-      let isPlayingEmbed = new MessageEmbed()
+      const isPlayingEmbed = new MessageEmbed()
         .setAuthor({ name: usertag, iconURL: avatar })
-        .setTitle(`You're Already Playing!`)
+        .setTitle("You're Already Playing!")
         .setDescription("Stop current game to start another one.")
         .setColor("RED");
 
@@ -48,9 +48,9 @@ module.exports = {
 
     isPlaying.add(interaction.user.id);
 
-    let startEmbed = new MessageEmbed()
+    const startEmbed = new MessageEmbed()
       .setAuthor({ name: usertag, iconURL: avatar })
-      .setTitle(`Starting Akinator...`)
+      .setTitle("Starting Akinator...")
       .setDescription("Game will begin Shortly")
       .setColor("RANDOM");
 
@@ -59,21 +59,21 @@ module.exports = {
       fetchReply: true,
     });
 
-    let aki = new Aki({ region: "en" });
+    const aki = new Aki({ region: "en" });
     await aki.start();
 
     let notFinished = true;
     let stepsSinceLastGuess = 0;
 
-    let noReplyEmbed = new MessageEmbed()
+    const noReplyEmbed = new MessageEmbed()
       .setAuthor({ name: usertag, iconURL: avatar })
-      .setTitle(`Game Ended`)
+      .setTitle("Game Ended")
       .setDescription(
         `**${interaction.user.username}, Your Game ended due to inactivity.**`
       )
       .setColor("RANDOM");
 
-    let akiEmbed = new MessageEmbed()
+    const akiEmbed = new MessageEmbed()
       .setAuthor({ name: usertag, iconURL: avatar })
       .setTitle(`Question ${aki.currentStep + 1}`)
       .setDescription(`**Progress: 0%\n${aki.question}**`)
@@ -81,9 +81,9 @@ module.exports = {
         "Please press...",
         "**Yes**\n**No**\n**I don't know**\n**Probably**\n**Probably Not**\n**Back**"
       )
-      .setFooter({ text: `You can also press "Stop" to End your Game` })
+      .setFooter({ text: "You can also press \"Stop\" to End your Game" })
       .setColor("RANDOM");
-    let akiMessage = await interaction.editReply({
+    const akiMessage = await interaction.editReply({
       embeds: [akiEmbed],
       components: [row, row2],
       fetchReply: true,
@@ -113,7 +113,7 @@ module.exports = {
 
         stepsSinceLastGuess = 0;
 
-        let guessEmbed = new MessageEmbed()
+        const guessEmbed = new MessageEmbed()
           .setAuthor({ name: usertag, iconURL: avatar })
           .setTitle(
             `I'm ${Math.round(aki.progress)}% Sure your Character is...`
@@ -141,9 +141,9 @@ module.exports = {
             const answer = int.customId;
             attemptingGuess.delete(interaction.guild.id);
             if (answer == "y") {
-              let finishedGameCorrect = new MessageEmbed()
+              const finishedGameCorrect = new MessageEmbed()
                 .setAuthor({ name: usertag, iconURL: avatar })
-                .setTitle(`Well Played!`)
+                .setTitle("Well Played!")
                 .setDescription(
                   `**${interaction.user.username}, i guessed it right :D**`
                 )
@@ -161,9 +161,9 @@ module.exports = {
               return;
             } else if (answer == "n") {
               if (aki.currentStep >= 78) {
-                let finishedGameDefeated = new MessageEmbed()
+                const finishedGameDefeated = new MessageEmbed()
                   .setAuthor({ name: usertag, iconURL: avatar })
-                  .setTitle(`Well Played!`)
+                  .setTitle("Well Played!")
                   .setDescription(
                     `**${interaction.user.username}, oof, you defeated me D:**`
                   )
@@ -179,7 +179,7 @@ module.exports = {
               }
             }
           })
-          .catch(async (e) => {
+          .catch(async () => {
             akiMessage.edit({
               components: [row, row2].map((e) => {
                 e.components = e.components.map((i) => {
@@ -195,7 +195,7 @@ module.exports = {
 
       if (!notFinished) return;
 
-      let updatedAkiEmbed = new MessageEmbed()
+      const updatedAkiEmbed = new MessageEmbed()
         .setAuthor({ name: usertag, iconURL: avatar })
         .setTitle(`Question ${aki.currentStep + 1}`)
         .setDescription(
@@ -205,7 +205,7 @@ module.exports = {
           "Please press...",
           "**Yes**\n**No**\n**I don't know**\n**Probably**\n**Probably Not**\n**Back**"
         )
-        .setFooter({ text: `You can also press "Stop" to End your Game` })
+        .setFooter({ text: "You can also press \"Stop\" to End your Game" })
         .setColor("RANDOM");
       interaction.channel.messages.edit(akiMessage.id, {
         embeds: [updatedAkiEmbed],
@@ -231,7 +231,7 @@ module.exports = {
             pn: 4,
           };
           const answer = int.customId;
-          let thinkingEmbed = new MessageEmbed()
+          const thinkingEmbed = new MessageEmbed()
             .setAuthor({ name: usertag, iconURL: avatar })
             .setTitle(`Question ${aki.currentStep + 1}`)
             .setDescription(
@@ -241,7 +241,7 @@ module.exports = {
               "Please press...",
               "**Yes**\n**No**\n**I don't know**\n**Probably**\n**Probably Not**\n**Back**"
             )
-            .setFooter({ text: `Thinking...` })
+            .setFooter({ text: "Thinking..." })
             .setColor("RANDOM");
           await int.update({
             embeds: [thinkingEmbed],
@@ -259,9 +259,9 @@ module.exports = {
             }
           } else if (answer == "s") {
             isPlaying.delete(interaction.user.id);
-            let stopEmbed = new MessageEmbed()
+            const stopEmbed = new MessageEmbed()
               .setAuthor({ name: usertag, iconURL: avatar })
-              .setTitle(`Game Ended`)
+              .setTitle("Game Ended")
               .setDescription(
                 `**${interaction.user.username}, your game was successfully ended!**`
               )
@@ -278,7 +278,7 @@ module.exports = {
 
           if (!notFinished) return;
         })
-        .catch(async (e) => {
+        .catch(async () => {
           await aki.win();
           notFinished = false;
           isPlaying.delete(interaction.user.id);

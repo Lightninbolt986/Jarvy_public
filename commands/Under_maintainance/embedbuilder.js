@@ -1,4 +1,4 @@
-const {
+/* const {
   MessageActionRow,
   MessageEmbed,
   MessageButton,
@@ -398,3 +398,4 @@ async function handleModal(title, label, style) {
     .catch((err) => {});
   const ad = int.fields.getTextInputValue("adInput");
 }
+ */

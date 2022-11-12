@@ -14,7 +14,7 @@ module.exports = async (Discord, client, message) => {
       try {
         const profileModel = require("../../models/guildSchema");
 
-        let profile = await profileModel.create({
+        const profile = await profileModel.create({
           GuildID: message.guild.id,
         });
         profile.save();
@@ -64,21 +64,19 @@ module.exports = async (Discord, client, message) => {
     profileData.is_afk = false;
     profileData.afkreason = null;
     const ping = profileData.afkPings.map((i) => {
-      return `<:CH_h1_maindot:987347112419274813> <@${i.pinger}> - <t:${i.time}:R> [Jump to message](${i.url})\n**Message Content**: *${i.content}*\n━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\━\n`;
+      return `<:CH_h1_maindot:987347112419274813> <@${i.pinger}> - <t:${i.time}:R> [Jump to message](${i.url})\n**Message Content**: *${i.content}*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
     });
     const embed = {};
-    let embedslist = [];
-    var i,
-      j,
-      temporary,
-      chunk = 5;
+    const embedslist = [];
+    let i, j, temporary;
+    const chunk = 5;
     for (i = 0, j = ping.length; i < j; i += chunk) {
       temporary = ping.slice(i, i + chunk);
       embed[`${i / chunk}`] = new Discord.MessageEmbed()
-        .setDescription(`${temporary.join(``)}`)
+        .setDescription(`${temporary.join("")}`)
         .setColor("BLURPLE");
     }
-    for (let i = 0; i < Object.keys(embed).length; i++) {
+    for (i = 0; i < Object.keys(embed).length; i++) {
       embedslist.push(embed[i]);
     }
     profileData.afkPings = [];

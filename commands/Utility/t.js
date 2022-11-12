@@ -1,8 +1,8 @@
 module.exports = {
   name: "t",
-  async execute(message, args, cmd, client) {
+  async execute(message, args, cm, client) {
     function getCommands(comd) {
-      output = [];
+      const output = [];
       comd.forEach((cmd) => {
         if (
           !cmd.options?.some((option) => option.type === 1 || option.type === 2)

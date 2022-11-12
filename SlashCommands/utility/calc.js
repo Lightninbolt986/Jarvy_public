@@ -3,8 +3,8 @@ const math = require("mathjs");
 module.exports = {
   name: "calculator",
   description: "Use a calculator in discord",
-  execute: async (interaction, client) => {
-    let buttons = [
+  execute: async (interaction) => {
+    const buttons = [
       new MessageActionRow().addComponents(
         new MessageButton()
           .setCustomId("6")
@@ -86,18 +86,16 @@ module.exports = {
       ),
     ];
 
-    let embed = new MessageEmbed().setDescription(
-      `\`\`\`css\nPlaceholder\n\`\`\``
-    );
+    const embed = new MessageEmbed().setDescription("```css\nPlaceholder\n```");
 
     interaction.reply({
       embeds: [embed],
       components: buttons,
     });
 
-    let user = interaction.user.id;
-    var ids = [];
-    var nums = [];
+    const user = interaction.user.id;
+    const ids = [];
+    const nums = [];
     for (let i = 0; i < buttons.length; i++) {
       for (let v = 0; v < buttons[i].components.length; v++) {
         ids.push(buttons[i].components[v].customId);
@@ -111,8 +109,8 @@ module.exports = {
         }
       }
     }
-    const filter = (interaction) =>
-      ids.includes(interaction.customId) && interaction.user.id === user;
+    const filter = (interactio) =>
+      ids.includes(interactio.customId) && interactio.user.id === user;
 
     const collector = await interaction.channel.createMessageComponentCollector(
       {
@@ -121,12 +119,12 @@ module.exports = {
       }
     );
 
-    var equation = "";
+    let equation = "";
 
     collector.on("collect", async (i) => {
       if (i.user.id !== user) {
         return i.reply({
-          content: `These buttons aren't for you`,
+          content: "These buttons aren't for you",
           ephemeral: true,
         });
       }
@@ -138,11 +136,11 @@ module.exports = {
           .editReply({
             embeds: [embed.setDescription(`\`\`\`css\n${equation}\n\`\`\``)],
           })
-          .catch((e) => {});
+          .catch(() => {});
       }
       if (i.customId === "=") {
         await i.deferUpdate();
-        let answer = math.evaluate(equation);
+        const answer = math.evaluate(equation);
         await i
           .editReply({
             embeds: [
@@ -151,7 +149,7 @@ module.exports = {
               ),
             ],
           })
-          .catch((e) => {});
+          .catch(() => {});
         await i
           .followUp({
             embeds: [
@@ -161,16 +159,16 @@ module.exports = {
             ],
             ephemeral: true,
           })
-          .catch((e) => {});
+          .catch(() => {});
       }
       if (i.customId === "reset") {
         await i.deferUpdate();
         equation = "";
         await i
           .editReply({
-            embeds: [embed.setDescription(`\`\`\`css\nPlaceholder\n\`\`\``)],
+            embeds: [embed.setDescription("```css\nPlaceholder\n```")],
           })
-          .catch((e) => {});
+          .catch(() => {});
       }
       if (i.customId === "end") {
         await i.deferUpdate();
@@ -179,9 +177,9 @@ module.exports = {
     });
 
     collector.on("end", async (i, reason) => {
-      for (let i = 0; i < buttons.length; i++) {
-        for (let v = 0; v < buttons[i].components.length; v++) {
-          buttons[i].components[v].setDisabled(true);
+      for (let ii = 0; ii < buttons.length; ii++) {
+        for (let v = 0; v < buttons[ii].components.length; v++) {
+          buttons[ii].components[v].setDisabled(true);
         }
       }
 
@@ -190,13 +188,13 @@ module.exports = {
           .editReply({
             components: buttons,
           })
-          .catch((e) => {});
+          .catch(() => {});
       } else {
         await interaction
           .editReply({
             components: buttons,
           })
-          .catch((e) => {});
+          .catch(() => {});
       }
     });
   },

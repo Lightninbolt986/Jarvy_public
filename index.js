@@ -29,14 +29,14 @@ client.handle = new Errorhandler(client, {
 process.on("unhandledRejection", (error) => {
   client.handle.createrr(client, undefined, undefined, error);
 });
-mongoose = require("mongoose");
-const { DiscordUNO } = require(`discord-uno`);
+const mongoose = require("mongoose");
+const { DiscordUNO } = require("discord-uno");
 client.discordUNO = new DiscordUNO("BLURPLE");
 client.queue = new Map();
 const { DiscordTogether } = require("discord-together");
 
 client.discordTogether = new DiscordTogether(client);
-Nuggies = require("nuggies");
+const Nuggies = require("nuggies");
 Nuggies.connect(process.env.MONGODB_srv);
 Nuggies.giveaways.startAgain(client);
 Nuggies.handleInteractions(client);
@@ -55,18 +55,18 @@ Nuggies.Messages(client, {
       "https://media.discordapp.net/attachments/892704135244283916/893702003241418833/ezgif-2-4fb5c8791af4.gif",
     winMessage:
       "Congrats {winners}! You won `{prize}`!! Total `{totalParticipants}` members participated and your winning percentage was `{winPercentage}%`",
-    rerolledMessage: "Rerolled! {winner} is the new winner of the giveaway!", // only {winner} placeholder
+    rerolledMessage: "Rerolled! {winner} is the new winner of the giveaway!",
     toParticipate: "**Click the Enter button to enter the giveaway!**",
     newParticipant:
-      "You have successfully entered for this giveaway! your win percentage is `{winPercentage}%` among `{totalParticipants}` other participants", // no placeholders | ephemeral
-    alreadyParticipated: "You've already entered this giveaway!", // no placeholders | ephemeral
-    noParticipants: "There are not enough people in the giveaway!", // no placeholders
+      "You have successfully entered for this giveaway! your win percentage is `{winPercentage}%` among `{totalParticipants}` other participants",
+    alreadyParticipated: "You've already entered this giveaway!",
+    noParticipants: "There are not enough people in the giveaway!",
     noRole:
-      "You do not have the required role(s)\n{requiredRoles}\n for the giveaway!", // only {requiredRoles} | ephemeral
+      "You do not have the required role(s)\n{requiredRoles}\n for the giveaway!",
     dmMessage:
       "You have won a giveaway in **{guildName}**!\nPrize: [{prize}]({giveawayURL})",
-    noWinner: "Not enough people participated in this giveaway.", // no {winner} placerholder
-    alreadyEnded: "The giveaway has already ended!", // no {winner} placeholder
+    noWinner: "Not enough people participated in this giveaway.",
+    alreadyEnded: "The giveaway has already ended!",
     dropWin: "{winner} Won The Drop!!",
   },
 });
@@ -94,4 +94,3 @@ client.commands = new Discord.Collection();
   }
 );
 client.login(token);
-

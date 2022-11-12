@@ -35,7 +35,7 @@ module.exports = {
         ephemeral: true,
       });
     const finalTime = Date.now() + msTime;
-    const unixTime = Math.floor(finalTime / 1000); /* 
+    const unixTime = Math.floor(finalTime / 1000); /*
     const embed = new Messagee */
     const dot = "<a:JBC_timer:1002832153958162513>";
     const embed = new Discord.MessageEmbed()

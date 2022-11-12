@@ -480,71 +480,80 @@ const { AsyncQueue } = require("@sapphire/async-queue");
 const { default: axios } = require("axios");
 const amariQueue = new AsyncQueue();
 module.exports = {
-  paginate: async function (embeds, message) {
+  paginate: async function (embeds, message, extra = [], edit = false) {
+    if (edit) {
+      if (message.user) {
+        message.reply = message.message.edit;
+      } else message.reply = message.edit;
+    }
     const Discord = require("discord.js");
-    let first = new Discord.MessageButton()
+    const first = new Discord.MessageButton()
       .setEmoji("<:first2:926539374546542622>")
       .setStyle("SECONDARY")
-      .setCustomId(`first`);
+      .setCustomId("first");
 
-    let previous = new Discord.MessageButton()
+    const previous = new Discord.MessageButton()
       .setEmoji("<:back2:926539569623613472>")
       .setStyle("SECONDARY")
-      .setCustomId(`previous`);
+      .setCustomId("previous");
 
-    let next = new Discord.MessageButton()
-      .setEmoji(`<:next2:926539617350611005>`)
+    const next = new Discord.MessageButton()
+      .setEmoji("<:next2:926539617350611005>")
       .setStyle("SECONDARY")
-      .setCustomId(`next`);
+      .setCustomId("next");
 
-    let last = new Discord.MessageButton()
-      .setEmoji(`<:last2:926539452371857438>`)
+    const last = new Discord.MessageButton()
+      .setEmoji("<:last2:926539452371857438>")
       .setStyle("SECONDARY")
-      .setCustomId(`last`);
+      .setCustomId("last");
 
-    let dfirst = new Discord.MessageButton()
+    const dfirst = new Discord.MessageButton()
       .setEmoji("<:first2:926539374546542622>")
       .setStyle("SECONDARY")
-      .setCustomId(`dfirst`)
+      .setCustomId("dfirst")
       .setDisabled(true);
 
-    let dprevious = new Discord.MessageButton()
+    const dprevious = new Discord.MessageButton()
       .setEmoji("<:back2:926539569623613472>")
       .setStyle("SECONDARY")
-      .setCustomId(`dprevious`)
+      .setCustomId("dprevious")
       .setDisabled(true);
 
-    let dnext = new Discord.MessageButton()
-      .setEmoji(`<:next2:926539617350611005>`)
+    const dnext = new Discord.MessageButton()
+      .setEmoji("<:next2:926539617350611005>")
       .setStyle("SECONDARY")
-      .setCustomId(`dnext`)
+      .setCustomId("dnext")
       .setDisabled(true);
 
-    let dlast = new Discord.MessageButton()
-      .setEmoji(`<:last2:926539452371857438>`)
+    const dlast = new Discord.MessageButton()
+      .setEmoji("<:last2:926539452371857438>")
       .setStyle("SECONDARY")
-      .setCustomId(`dlast`)
+      .setCustomId("dlast")
       .setDisabled(true);
 
     let currentPage = 1;
 
     let page = new Discord.MessageButton()
       .setStyle("SECONDARY")
-      .setCustomId(`page`)
+      .setCustomId("page")
       .setLabel(`${currentPage}/${embeds.length}`)
       .setDisabled(true);
-    let butts = [dfirst, dprevious, page, next, last];
+    const butts = [dfirst, dprevious, page, next, last];
     let m;
     if (!message.replied && !message.deferred) {
       m = await message.reply({
         embeds: [embeds[0]],
-        components: [new Discord.MessageActionRow().addComponents(butts)],
+        components: [
+          new Discord.MessageActionRow().addComponents(butts),
+        ].concat(extra),
         fetchReply: true,
       });
     } else {
       m = await message.editReply({
         embeds: [embeds[0]],
-        components: [new Discord.MessageActionRow().addComponents(butts)],
+        components: [
+          new Discord.MessageActionRow().addComponents(butts),
+        ].concat(extra),
         fetchReply: true,
       });
     }
@@ -566,9 +575,9 @@ module.exports = {
       if (i.customId === "first") {
         currentPage = 1;
 
-        let page = new Discord.MessageButton()
+        page = new Discord.MessageButton()
           .setStyle("SECONDARY")
-          .setCustomId(`page`)
+          .setCustomId("page")
           .setLabel(`${currentPage}/${embeds.length}`)
           .setDisabled(true);
 
@@ -579,16 +588,16 @@ module.exports = {
 
         m.edit({
           embeds: [embeds[currentPage - 1]],
-          components: [components],
+          components: [components].concat(extra),
         }).catch(() => {});
       }
 
       if (i.customId === "previous") {
         currentPage--;
 
-        let page = new Discord.MessageButton()
+        page = new Discord.MessageButton()
           .setStyle("SECONDARY")
-          .setCustomId(`page`)
+          .setCustomId("page")
           .setLabel(`${currentPage}/${embeds.length}`)
           .setDisabled(true);
 
@@ -603,16 +612,19 @@ module.exports = {
 
         m.edit({
           embeds: [embeds[currentPage - 1]],
-          components: currentPage > 1 ? [components] : [dcomponents],
+          components:
+            currentPage > 1
+              ? [components].concat(extra)
+              : [dcomponents].concat(extra),
         }).catch(() => {});
       }
 
       if (i.customId === "next") {
         currentPage++;
 
-        let page = new Discord.MessageButton()
+        page = new Discord.MessageButton()
           .setStyle("SECONDARY")
-          .setCustomId(`page`)
+          .setCustomId("page")
           .setLabel(`${currentPage}/${embeds.length}`)
           .setDisabled(true);
 
@@ -628,16 +640,18 @@ module.exports = {
         m.edit({
           embeds: [embeds[currentPage - 1]],
           components:
-            currentPage < embeds.length ? [components] : [dcomponents],
+            currentPage < embeds.length
+              ? [components].concat(extra)
+              : [dcomponents].concat(extra),
         }).catch(() => {});
       }
 
       if (i.customId === "last") {
         currentPage = embeds.length;
 
-        let page = new Discord.MessageButton()
+        page = new Discord.MessageButton()
           .setStyle("SECONDARY")
-          .setCustomId(`page`)
+          .setCustomId("page")
           .setLabel(`${currentPage}/${embeds.length}`)
           .setDisabled(true);
 
@@ -648,31 +662,33 @@ module.exports = {
 
         m.edit({
           embeds: [embeds[currentPage - 1]],
-          components: [components],
+          components: [components].concat(extra),
         }).catch(() => {});
       }
     });
 
     collector.on("end", (mes, r) => {
       if (r == "time") {
-        let lpage = new Discord.MessageButton()
+        const lpage = new Discord.MessageButton()
           .setStyle("SECONDARY")
-          .setCustomId(`page`)
+          .setCustomId("page")
           .setLabel(`${currentPage}/${embeds.length}`)
           .setDisabled(true);
 
         const dbutts = [dfirst, dprevious, lpage, dnext, dlast];
         m.edit({
           embeds: [embeds[currentPage - 1]],
-          components: [new Discord.MessageActionRow().addComponents(dbutts)],
+          components: [
+            new Discord.MessageActionRow().addComponents(dbutts),
+          ].concat(extra),
         });
       }
     });
   },
   getNumbers: function (num, max = 100, min = 0) {
-    var arr = [];
+    const arr = [];
     while (arr.length < num) {
-      var r = Math.floor(Math.random() * max) + 1;
+      const r = Math.floor(Math.random() * max) + 1;
       if (arr.indexOf(r) === -1 && r > min) arr.push(r);
     }
     return arr;
@@ -685,7 +701,7 @@ module.exports = {
   },
   getBingos: function (nums) {
     let bingos = 0;
-    //1st column
+    // 1st column
     if (
       nums[0].includes(" ") &&
       nums[1].includes(" ") &&
@@ -695,7 +711,7 @@ module.exports = {
     ) {
       bingos++;
     }
-    //2nd column
+    // 2nd column
     if (
       nums[5].includes(" ") &&
       nums[6].includes(" ") &&
@@ -705,7 +721,7 @@ module.exports = {
     ) {
       bingos++;
     }
-    //3rd column
+    // 3rd column
     if (
       nums[10].includes(" ") &&
       nums[11].includes(" ") &&
@@ -724,7 +740,7 @@ module.exports = {
     ) {
       bingos++;
     }
-    //5th column
+    // 5th column
     if (
       nums[19].includes(" ") &&
       nums[20].includes(" ") &&
@@ -735,7 +751,7 @@ module.exports = {
       bingos++;
     }
 
-    //1st row
+    // 1st row
     if (
       nums[0].includes(" ") &&
       nums[5].includes(" ") &&
@@ -746,7 +762,7 @@ module.exports = {
       bingos++;
     }
 
-    //2nd row
+    // 2nd row
     if (
       nums[1].includes(" ") &&
       nums[6].includes(" ") &&
@@ -757,7 +773,7 @@ module.exports = {
       bingos++;
     }
 
-    //3rd row
+    // 3rd row
     if (
       nums[2].includes(" ") &&
       nums[7].includes(" ") &&
@@ -767,7 +783,7 @@ module.exports = {
       bingos++;
     }
 
-    //4th row
+    // 4th row
     if (
       nums[3].includes(" ") &&
       nums[8].includes(" ") &&
@@ -778,7 +794,7 @@ module.exports = {
       bingos++;
     }
 
-    //5th row
+    // 5th row
     if (
       nums[4].includes(" ") &&
       nums[9].includes(" ") &&
@@ -789,7 +805,7 @@ module.exports = {
       bingos++;
     }
 
-    //top left to bottom right diagnal
+    // top left to bottom right diagnal
     if (
       nums[0].includes(" ") &&
       nums[6].includes(" ") &&
@@ -799,7 +815,7 @@ module.exports = {
       bingos++;
     }
 
-    //top right to bottom left diagnol
+    // top right to bottom left diagnol
     if (
       nums[19].includes(" ") &&
       nums[15].includes(" ") &&
@@ -813,16 +829,16 @@ module.exports = {
     return bingos;
   },
   formatArray: function (arr) {
-    var outStr = "";
+    let outStr = "";
     if (arr.length === 1) {
       outStr = arr[0];
     } else if (arr.length === 2) {
-      //joins all with "and" but no commas
-      //example: "bob and sam"
+      // joins all with "and" but no commas
+      // example: "bob and sam"
       outStr = arr.join(" and ");
     } else if (arr.length > 2) {
-      //joins all with commas, but last one gets ", and" (oxford comma!)
-      //example: "bob, joe, and sam"
+      // joins all with commas, but last one gets ", and" (oxford comma!)
+      // example: "bob, joe, and sam"
       outStr = arr.slice(0, -1).join(", ") + ", and " + arr.slice(-1);
     }
     return outStr;
@@ -855,13 +871,11 @@ module.exports = {
       );
     if (array.length < 0)
       throw new Error(
-        chalk.red.bold(`The array has to have atleast one thing to select!`)
+        chalk.red.bold("The array has to have atleast one thing to select!")
       );
-    let select_menu;
+    const id = "help-menus";
 
-    let id = "help-menus";
-
-    let menus = [];
+    const menus = [];
 
     const emo = {
       utility: {
@@ -915,11 +929,11 @@ module.exports = {
     };
 
     array.forEach((cca) => {
-      let name = cca;
-      let sName = `${name.toUpperCase()}`;
-      let tName = name.charAt(0).toUpperCase() + name.slice(1);
-      let fName = name.toUpperCase();
-      let emoji = emo[name.toLowerCase()];
+      const name = cca;
+      const sName = `${name.toUpperCase()}`;
+      const tName = name.charAt(0).toUpperCase() + name.slice(1);
+      const fName = name.toUpperCase();
+      const emoji = emo[name.toLowerCase()];
 
       return menus.push({
         label: sName,
@@ -929,12 +943,12 @@ module.exports = {
       });
     });
 
-    let chicken = new MessageSelectMenu()
+    const chicken = new MessageSelectMenu()
       .setCustomId(id)
       .setPlaceholder("Choose the command category")
       .addOptions(menus);
 
-    select_menu = new MessageActionRow().addComponents(chicken);
+    const select_menu = new MessageActionRow().addComponents(chicken);
 
     return {
       smenu: [select_menu],
@@ -960,7 +974,7 @@ module.exports = {
     });
     collector.on("collect", async (i) => {
       if (i.customId === "gaw-join") {
-        //Fetch member from i.user
+        // Fetch member from i.user
         await i.deferReply({ ephemeral: true });
         gaw = await guildSchema.findOne({
           "giveaways.giveaways.id": i.message.id,
@@ -996,9 +1010,9 @@ module.exports = {
                   );
                 }
               }
-              //amari
+              // amari
               if (giveaway.requirements.amari || giveaway.requirements.wamari) {
-                amariData = await fetchAmari(i.user.id, i.guild.id);
+                const amariData = await fetchAmari(i.user.id, i.guild.id);
                 if (!amariData)
                   return i.editReply("Error fetching amari data!");
                 if (giveaway.requirements.amari) {
@@ -1070,17 +1084,17 @@ module.exports = {
       amariQueue.shift();
     }
   },
-  giveawayEnd: async function (msgId, client) {
+  giveawayEnd: async function (msgId, client, GuildID) {
     const { getMultipleRandom } = require("./functions.js");
     const guildSchema = require("./models/guildSchema");
-    let gaw = await guildSchema.findOne({ "giveaways.giveaways.id": msgId });
-    let giveaway = gaw.giveaways.giveaways.find((e) => e.id === msgId);
+    const gaw = await guildSchema.findOne({ "giveaways.giveaways.id": msgId });
+    const giveaway = gaw.giveaways.giveaways.find((e) => e.id === msgId);
     const msg = client.channels.cache
       .get(giveaway.channel)
       .messages.cache.get(giveaway.id);
     if (!msg) {
       await guildSchema.findOneAndDelete(
-        { GuildID: interaction.guild.id },
+        { GuildID },
         {
           $pull: {
             "giveaways.giveaways": giveaway,
@@ -1103,8 +1117,8 @@ module.exports = {
         winners = `<@${win.join(">, <@")}>`;
       }
 
-      //const winner = entries[Math.floor(Math.random() * entries.length)];
-      //incorporate settings
+      // const winner = entries[Math.floor(Math.random() * entries.length)];
+      // incorporate settings
       const desc1 = msg.embeds[0].description.split(
         "<:bp_reply:905405401946783804>Requirements:"
       );
@@ -1113,7 +1127,7 @@ module.exports = {
           new MessageEmbed()
             .setTitle(`<:bp_gift:923106198906093619> ${giveaway.prize}`)
             .setThumbnail(msg.guild.iconURL())
-            //TODO: add settings
+            // TODO: add settings
             .setDescription(
               desc1[0].replace("ends", "ended") +
                 `<:bp_replycont:905405321277763624>Winner(s): ${winners}\n` +
@@ -1169,8 +1183,320 @@ module.exports = {
       return text;
     }
     text = text.substring(0, length);
-    last = text.lastIndexOf(" ");
+    const last = text.lastIndexOf(" ");
     text = text.substring(0, last);
     return text + "...";
+  },
+  bar: function (val) {
+    let bar;
+    const value = parseInt(val);
+    const finalval = (value / 100) * 100;
+    const full = "<:bp_full:920060141943029780>";
+    const start = "<:bp_str:920059865785835530>";
+    const empty = "<:bp_mt:920060097131061259>";
+    const half = "<:bp_5:920060037815205928>";
+    const zero = "<:bp_0:920059944580051024>";
+    const eempty = "<:bp_e:920060587009015818>";
+    const efull = "<:bp_ef:920060292942155796>";
+    const ehalf = "<:bp_e5:920060255889666048>";
+    const ezero = "<:bp_e0:920060208007479376>";
+
+    if (finalval >= 100) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        efull
+      }`;
+    } else if (finalval < 100 && finalval >= 95) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        ehalf
+      }`;
+    } else if (finalval < 95 && finalval >= 90) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        ezero
+      }`;
+    } else if (finalval < 90 && finalval >= 85) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        half +
+        eempty
+      }`;
+    } else if (finalval < 85 && finalval >= 80) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        zero +
+        eempty
+      }`;
+    } else if (finalval < 80 && finalval >= 75) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        half +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 75 && finalval >= 70) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        zero +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 70 && finalval >= 65) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        half +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 65 && finalval >= 60) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        zero +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 60 && finalval >= 55) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        full +
+        zero +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 55 && finalval >= 50) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        full +
+        zero +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 50 && finalval >= 45) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        half +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 45 && finalval >= 40) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        full +
+        zero +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 40 && finalval >= 35) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        half +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 35 && finalval >= 30) {
+      bar = `${
+        start +
+        full +
+        full +
+        full +
+        zero +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 30 && finalval >= 25) {
+      bar = `${
+        start +
+        full +
+        full +
+        half +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 25 && finalval >= 20) {
+      bar = `${
+        start +
+        full +
+        full +
+        zero +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 20 && finalval >= 15) {
+      bar = `${
+        start +
+        full +
+        half +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 15 && finalval >= 10) {
+      bar = `${
+        start +
+        full +
+        zero +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 10 && finalval >= 5) {
+      bar = `${
+        start +
+        half +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    } else if (finalval < 5 && finalval >= 0) {
+      bar = `${
+        start +
+        zero +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        empty +
+        eempty
+      }`;
+    }
+
+    return bar;
   },
 };

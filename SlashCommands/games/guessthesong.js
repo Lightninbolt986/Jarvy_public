@@ -13,7 +13,7 @@ module.exports = {
     },
   ],
   async execute(interaction) {
-    let round = interaction.options.getInteger("rounds") || 5;
+    const round = interaction.options.getInteger("rounds") || 5;
     await interaction.reply({
       content: `Round of guess the song started by ${
         interaction.user.tag
@@ -25,8 +25,8 @@ module.exports = {
     await delay(30000);
 
     for (let step = 0; step < round; step++) {
-      let { guessSongEmoji } = require(`../../functions`);
-      let SongEmoji = guessSongEmoji();
+      const { guessSongEmoji } = require("../../functions");
+      const SongEmoji = guessSongEmoji();
       interaction.followUp({
         embeds: [
           new Discord.MessageEmbed()
@@ -43,7 +43,7 @@ module.exports = {
       interaction.followUp({
         embeds: [
           new Discord.MessageEmbed()
-            .setTitle(`<a:neo_greentick:876391533920813086> Round results -`)
+            .setTitle("<a:neo_greentick:876391533920813086> Round results -")
             .setFooter("Next round (if any) starts in 10 seconds")
             .setDescription(
               `<:neo_replycontblue:876339530708426754> Song: ${SongEmoji.title}\n<:neo_replyblue:876339294611050576> Artist: ${SongEmoji.artist[0]}`

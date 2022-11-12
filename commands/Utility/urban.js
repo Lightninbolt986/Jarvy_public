@@ -1,17 +1,17 @@
 module.exports = {
-  name: 'urban',
-  description: 'Find a word on urban dictionary',
- async execute(message, args, cmd, client, Discord) {
+  name: "urban",
+  description: "Find a word on urban dictionary",
+  async execute(message, args) {
     const urban = require("urban");
 
-    const { MessageEmbed } = require('discord.js');
+    const { MessageEmbed } = require("discord.js");
 
     if (args.length < 1) return message.reply("Please enter something!");
-    let XD = args.join(" ");
-    urban(XD).first(json => {
-      if (!json) return message.reply("No results found!")
+    const XD = args.join(" ");
+    urban(XD).first((json) => {
+      if (!json) return message.reply("No results found!");
 
-      let urbEmbed = new MessageEmbed()
+      const urbEmbed = new MessageEmbed()
         .setColor("00ff00")
         .setTitle(json.word)
         .setDescription(json.definition)
@@ -19,7 +19,7 @@ module.exports = {
         .addField("Downvotes", json.thumbs_down, true)
         .setFooter(`Written by: ${json.author}`);
 
-      message.channel.send({embeds:[urbEmbed]})
+      message.channel.send({ embeds: [urbEmbed] });
     });
-  }
-}
+  },
+};
