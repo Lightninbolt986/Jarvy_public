@@ -48,8 +48,8 @@ module.exports = {
     await msg.react("⌚");
     setTimeout(() => {
       if (mentionaAll) {
-        final = [];
-        str = "";
+        let final = [];
+        let str = "";
         [
           ...msg.reactions.cache
             .first()

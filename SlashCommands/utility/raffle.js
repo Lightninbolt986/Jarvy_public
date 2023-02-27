@@ -139,12 +139,12 @@ module.exports = {
             }\`)\n`
           );
         });
-        desc = {};
+        const desc = {};
         let k,
           j,
           temporary,
-          chunk = 15,
           p = 1;
+        const chunk = 15;
         for (k = 0, j = msgArr.length; k < j; k += chunk) {
           temporary = msgArr.slice(k, k + chunk);
           desc[`${p}`] = new Discord.MessageEmbed()
@@ -199,7 +199,7 @@ module.exports = {
         number2000++;
         const channel = client.channels.cache.get(guild.raffle.channel);
         if (channel)
-          await channel.send({ embeds: [embed2] }).catch((err) => {
+          await channel.send({ embeds: [embed2] }).catch(() => {
             return;
           });
       });
@@ -284,7 +284,7 @@ module.exports = {
         }
       });
 
-      collector.on("end", (collected, reason) => {
+      collector.on("end", () => {
         msg.edit({
           components: row.map((e) => {
             e.components = e.components.map((i) => {

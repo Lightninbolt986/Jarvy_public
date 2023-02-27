@@ -1,6 +1,5 @@
 const ms = require("ms");
 const Discord = require("discord.js");
-const prettyMilliseconds = require("pretty-ms");
 const guildSchema = require("../../models/guildSchema");
 const { giveawayStart } = require("../../functions");
 module.exports = {
@@ -233,7 +232,7 @@ module.exports = {
       }
       if (requirementString.length === 0)
         requirementString = "\u2001\u2001<:bp_dot:918074237992988722>None!";
-      const content = "**Giveaway**";
+      //const content = "**Giveaway**";
       //TODO: add settings
       const emo = "🎉";
       const createRow = new Discord.MessageActionRow().addComponents(
