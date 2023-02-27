@@ -265,7 +265,7 @@ module.exports = {
         interval.get(subcmd).set(
           interaction.channel.id,
           setInterval(async () => {
-            fetch("https://meme-api.herokuapp.com/gimme").then((res) =>
+            fetch("https://meme-api.com/gimme").then((res) =>
               res.json().then((url) => {
                 interaction
                   .followUp({
