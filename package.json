@@ -64,7 +64,6 @@
     "typescript": "^4.5.2",
     "unirest": "^0.6.0",
     "urban": "^0.3.4",
-    "weather-js": "^2.0.0",
-    "weky": "^2.0.9"
+    "weather-js": "^2.0.0"
   }
 }
